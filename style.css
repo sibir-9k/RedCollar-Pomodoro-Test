@@ -1,0 +1,79 @@
+@font-face {
+	font-family: 'Redcollar';
+	src: url('./fonts/f02cf2e6e27a17bcfe9efa18c041c208.eot');
+	src: url('./fonts/f02cf2e6e27a17bcfe9efa18c041c208.eot?#iefix') format('embedded-opentype'),
+		url('./fonts/f02cf2e6e27a17bcfe9efa18c041c208.woff2') format('woff2'),
+		url('./fonts/f02cf2e6e27a17bcfe9efa18c041c208.woff') format('woff'),
+		url('./fonts/f02cf2e6e27a17bcfe9efa18c041c208.ttf') format('truetype'),
+		url('./fonts/f02cf2e6e27a17bcfe9efa18c041c208.svg#Redcollar') format('svg');
+}
+
+:root {
+	--main-bg-color: rgb(217, 85, 80);
+}
+
+body {
+	height: 100vh;
+	margin: 0 auto;
+	background-color: var(--main-bg-color);
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.timer {
+	width: 480px;
+	background-color: rgba(255, 255, 255, 0.1);
+	border-radius: 5px;
+	padding: 25px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+button {
+	cursor: pointer;
+	border: none;
+	margin: 0;
+	background: none;
+
+	color: white;
+	font-size: 16px;
+	border-radius: 4px;
+	padding: 2px 16px;
+	height: 28px;
+}
+
+button[active='true'] {
+	font-weight: bold;
+	background-color: rgba(0, 0, 0, 0.15);
+}
+
+.timer-time {
+	margin-top: 50px;
+	margin-bottom: 50px;
+  font-size: 6rem;
+}
+.minute,
+.dots,
+.seconds {
+	font-family: 'Redcollar';
+	 color: white;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 28px;
+}
+
+.timer-bottom {
+	display: flex;
+	width: 500px;
+	justify-content: space-evenly;
+}
+
+.btn {
+	width: 120px;
+	height: 45px;
+	background-color: #fff;
+	color: black;
+}
