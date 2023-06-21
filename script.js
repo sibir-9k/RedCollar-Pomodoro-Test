@@ -4,6 +4,7 @@ const root = document.documentElement;
 const timerBottom = document.querySelector('.timer-bottom');
 const buttonsBottom = timerBottom.querySelectorAll('*');
 const minute = document.querySelector('.minute');
+const seconds = document.querySelector('.seconds');
 
 const modal = document.querySelector('.modal');
 const closeBtnModal = document.querySelector('.close-btn');
@@ -61,34 +62,41 @@ handleInputUpdate(longInput, 'long-break');
 checkBtn.addEventListener('click', validateInput);
 
 function validateInput() {
-	if (
-		pomodoroInput.value <= 0 ||
-		pomodoroInput.value > 60 ||
-		shortInput.value <= 0 ||
-		shortInput.value > 60 ||
-		longInput.value <= 0 ||
-		longInput.value > 60
-	) {
+  let inputs = [pomodoroInput, shortInput, longInput];
+  let valid = true;
+  inputs.forEach((input) => {
+    if (input.value <= 0 || input.value > 60) {
+      valid = false;
+    }
+  });
+	if (!valid) {
 		document.getElementById('error-message').style.display = 'block';
 	} else {
 		document.getElementById('error-message').style.display = 'none';
-
+    stopTimer();
 		if (timer.mode === 'pomodoro') {
 			timer.pomodoro = pomodoroInput.valueAsNumber;
 			timer.remainingTime.minutes = pomodoroInput.valueAsNumber; 
 			timer.remainingTime.total = pomodoroInput.valueAsNumber * 60; 
+      timer.remainingTime.seconds = 0
 			minute.innerHTML = pomodoroInput.valueAsNumber;
+			seconds.innerHTML = '00';
 		} else if (timer.mode === 'short-break') {
 			timer['short-break'] = shortInput.valueAsNumber;
 			timer.remainingTime.minutes = shortInput.valueAsNumber; 
       timer.remainingTime.total = shortInput.valueAsNumber * 60;
+      timer.remainingTime.seconds = 0
 			minute.innerHTML = shortInput.valueAsNumber;
+      seconds.innerHTML = '00';
 		} else if (timer.mode === 'long-break') {
 			timer['long-break'] = longInput.valueAsNumber;
 			timer.remainingTime.minutes = longInput.valueAsNumber;
       timer.remainingTime.total = longInput.valueAsNumber * 60; 
+      timer.remainingTime.seconds = 0
 			minute.innerHTML = longInput.valueAsNumber;
+      seconds.innerHTML = '00';
 		}
+    
 		modal.classList.add('closed');
 	}
 }
