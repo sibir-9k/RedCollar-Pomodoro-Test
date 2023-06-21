@@ -7,6 +7,32 @@
   <title>Pomodoro</title>
 </head>
 <body>
+  <div class="modal closed">
+    <div class="modal-block">
+      <div class="close-block">
+        <button class="close-btn btn">Close</button>
+      </div>
+      <div class="inputs">
+        <div class="input-pomodoro">
+          <label>Pomodoro</label>
+          <input class="pomodoro__input" type="number" id="tentacles" name="tentacles" min="00" max="60" required>
+        </div>
+        <div class="input-short-break">
+          <label>Short Break</label>
+          <input class="short-break__input" type="number" id="tentacles" name="tentacles" min="00" max="60" required>
+        </div>
+        <div class="input-long-break">
+          <label>Long Break</label>
+          <input class="long-break__input" type="number" id="tentacles" name="tentacles" min="00" max="60" required>
+        </div>
+      </div>
+      <button class="check">Проверить</button>
+      <p id="error-message" style="display:none; color:red;">Введите значение больше 0 и меньше 60</p>
+    </div>
+  </div>
+  <div class="setting">
+    <button class="btn">Setting</button>
+  </div>
   <div class="timer">
     <div class="timer-top">
       <button id="pomodoro" active="true">Pomodoro</button>

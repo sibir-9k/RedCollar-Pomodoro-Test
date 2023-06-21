@@ -3,6 +3,15 @@ const buttonsTop = timerTop.querySelectorAll('*');
 const root = document.documentElement;
 const timerBottom = document.querySelector('.timer-bottom');
 const buttonsBottom = timerBottom.querySelectorAll('*');
+const minute = document.querySelector('.minute');
+
+const modal = document.querySelector('.modal');
+const closeBtnModal = document.querySelector('.close-btn');
+const settingBtn = document.querySelector('.setting');
+const pomodoroInput = document.querySelector('.pomodoro__input');
+const shortInput = document.querySelector('.short-break__input');
+const longInput = document.querySelector('.long-break__input');
+const checkBtn = document.querySelector('.check');
 
 let interval = null;
 
@@ -19,6 +28,70 @@ const timer = {
 	'long-break-interval': 4,
 	sessions: 0,
 };
+
+closeBtnModal.addEventListener('click', () => {
+	modal.classList.add('closed');
+});
+modal.addEventListener('click', (e) => {
+	if (e.target.className == 'modal') {
+		modal.classList.add('closed');
+	}
+});
+settingBtn.addEventListener('click', () => {
+	modal.classList.remove('closed');
+});
+
+pomodoroInput.valueAsNumber = timer.pomodoro;
+shortInput.valueAsNumber = timer['short-break'];
+longInput.valueAsNumber = timer['long-break'];
+
+function handleInputUpdate(selector, timerProp) {
+	selector.addEventListener('input', () => {
+		const value = selector.valueAsNumber;
+		timer[timerProp] = value;
+		timer.remainingTime.minutes = value;
+		minute.innerHTML = value;
+	});
+}
+
+handleInputUpdate(pomodoroInput, 'pomodoro');
+handleInputUpdate(shortInput, 'short-break');
+handleInputUpdate(longInput, 'long-break');
+
+checkBtn.addEventListener('click', validateInput);
+
+function validateInput() {
+	if (
+		pomodoroInput.value <= 0 ||
+		pomodoroInput.value > 60 ||
+		shortInput.value <= 0 ||
+		shortInput.value > 60 ||
+		longInput.value <= 0 ||
+		longInput.value > 60
+	) {
+		document.getElementById('error-message').style.display = 'block';
+	} else {
+		document.getElementById('error-message').style.display = 'none';
+
+		if (timer.mode === 'pomodoro') {
+			timer.pomodoro = pomodoroInput.valueAsNumber;
+			timer.remainingTime.minutes = pomodoroInput.valueAsNumber; 
+			timer.remainingTime.total = pomodoroInput.valueAsNumber * 60; 
+			minute.innerHTML = pomodoroInput.valueAsNumber;
+		} else if (timer.mode === 'short-break') {
+			timer['short-break'] = shortInput.valueAsNumber;
+			timer.remainingTime.minutes = shortInput.valueAsNumber; 
+      timer.remainingTime.total = shortInput.valueAsNumber * 60;
+			minute.innerHTML = shortInput.valueAsNumber;
+		} else if (timer.mode === 'long-break') {
+			timer['long-break'] = longInput.valueAsNumber;
+			timer.remainingTime.minutes = longInput.valueAsNumber;
+      timer.remainingTime.total = longInput.valueAsNumber * 60; 
+			minute.innerHTML = longInput.valueAsNumber;
+		}
+		modal.classList.add('closed');
+	}
+}
 
 buttonsBottom.forEach((button) => {
 	button.addEventListener('click', (e) => {
@@ -42,7 +115,6 @@ buttonsBottom.forEach((button) => {
 function getRemainingTime(endTime) {
 	const currentTime = Date.parse(new Date());
 	const difference = endTime - currentTime;
-
 	const total = Number.parseInt(difference / 1000, 10);
 	const minutes = Number.parseInt((total / 60) % 60, 10);
 	const seconds = Number.parseInt(total % 60, 10);
@@ -56,7 +128,6 @@ function getRemainingTime(endTime) {
 
 function startTimer() {
 	if (interval) return;
-
 	let { total } = timer.remainingTime;
 	const endTime = Date.parse(new Date()) + total * 1000;
 	if (timer.mode === 'pomodoro') timer.sessions++;
@@ -99,14 +170,18 @@ function resetTimer() {
 	timer['long-break'] = 15;
 	timer['long-break-interval'] = 4;
 	timer.sessions = 0;
+
+	pomodoroInput.valueAsNumber = timer.pomodoro;
+	shortInput.valueAsNumber = timer['short-break'];
+	longInput.valueAsNumber = timer['long-break'];
 	switchMode('pomodoro');
 }
 
 function updateClock() {
 	const { remainingTime } = timer;
 
-	const minutes = `${remainingTime.minutes}`.padStart(2, '0');
-	const seconds = `${remainingTime.seconds}`.padStart(2, '0');
+	const minutes = remainingTime.minutes.toString().padStart(2, '0');
+	const seconds = remainingTime.seconds.toString().padStart(2, '0');
 
 	const min = document.querySelector('.minute');
 	const sec = document.querySelector('.seconds');
@@ -142,6 +217,7 @@ buttonsTop.forEach((button) => {
 
 		changeColorTheme(id);
 		switchMode(id);
+		validateInput(id);
 		stopTimer();
 	});
 });
